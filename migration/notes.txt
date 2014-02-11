@@ -1,0 +1,12 @@
+#migration
+Migration requires moving data from
+
+Normalized addresses for:
+    1. facility
+    2. company
+
+#rough mapping
+#access_table => new_table
+Facility Table              => facility
+Participating Companies     => company
+
