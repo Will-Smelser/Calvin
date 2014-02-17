@@ -20,6 +20,8 @@ while($row = mysql_fetch_assoc($result)){
 }
 mysql_free_result($result);
 
+echo "<hr><h2>Adding Auditors</h2><hr>";
+
 //get the data from the access
 $q = 'SELECT * from `Auditor Table`';
 $result = $access->query($q);
@@ -42,3 +44,4 @@ while($row = $result->fetch()){
         echo "<span style='color:green'>SUCCESS: </span>$insert<br/>\n";
     }
 }
+
