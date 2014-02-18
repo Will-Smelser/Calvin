@@ -24,7 +24,7 @@ delete from country_codes;
 delete from state_codes;
  */
 $tables = array(
-    'audit_auditor','audit','personnel','auditor','facility','company','address','country_codes','state_codes'
+    'auditmain','audit_auditor','audit','personnel','auditor','facility','company','address','country_codes','state_codes'
 );
 
 foreach($tables as $table){
