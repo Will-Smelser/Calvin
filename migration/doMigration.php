@@ -24,7 +24,7 @@ delete from country_codes;
 delete from state_codes;
  */
 $tables = array(
-    'auditmain','audit_auditor','audit','personnel','auditor','facility','company','address','country_codes','state_codes'
+    'rqswsa','auditmain','audit_auditor','audit','personnel','auditor','facility','company','address','country_codes','state_codes'
 );
 
 foreach($tables as $table){
@@ -45,3 +45,6 @@ require_once 'm-personnel.php';
 
 //basic audit setup
 require_once 'm-audit.php';
+
+//add rqswsa table
+require_once 'm-auditRqs.php';

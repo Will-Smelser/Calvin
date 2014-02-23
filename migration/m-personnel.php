@@ -41,7 +41,7 @@ $result = $access->query($q);
 while($row = $result->fetch()){
     $fid = (isset($facilities[$row['Facility ID']]))?$facilities[$row['Facility ID']]:'NULL';
     $cid = (isset($companies[$row['Company']]))?$companies[$row['Company']]:'NULL';
-    $insert = "INSERT INTO {$mysqldb}personnel VALUES (NULL,\"{$row['Personnel\'s First Name']}\",\"{$row['Personnel\'s Last Name']}\",\"{$row['Personnel\'s Title']}\",$cid,$fid)";
+    $insert = "INSERT INTO {$mysqldb}personnel VALUES (NULL,\"{$row['Personnel\'s ID Code']}\",\"{$row['Personnel\'s First Name']}\",\"{$row['Personnel\'s Last Name']}\",\"{$row['Personnel\'s Title']}\",$cid,$fid)";
     $res = mysql_query($insert);
     if(!$res){
         echo "<span style='color:red'>FAILED: </span>$insert<br/>\n";
