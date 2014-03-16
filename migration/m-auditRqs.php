@@ -57,9 +57,11 @@ $q = "select * from `Quality System IDs`";
 $result = $access->query($q);
 if(!$result){var_dump($access->errorInfo());die();}
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
-    $insert = "INSERT INTO {$mysqldb}quality_system VALUES(NULL,\"{$row['QS ID']}\",\"{$row['Quality System']}\",";
-    $insert.= "\"{$row['QS Sub-System']}\",\"{$row['QS Sub-Topic']}\")";
-    $systems[$row['QS ID']] = mysql_insert_id();
+    $id = quote($row['QS ID']);
+    $system = quote($row['Quality System']);
+    $sub = quote($row['QS Sub-System']);
+    $topic = quote($row['QS Sub-Topic']);
+    $insert = "INSERT INTO {$mysqldb}quality_system VALUES(NULL,$id,$system,$sub,$topic)";
 
     $res = mysql_query($insert);
     if(!$res){
@@ -69,6 +71,7 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
     }else{
         echo "<span style='color:green'>SUCCESS: </span>$insert<br/>\n";
     }
+    $systems[$row['QS ID']] = mysql_insert_id();
 }
 
 
@@ -153,7 +156,7 @@ $q = "select * from `ws status`";
 $result = $access->query($q);
 if(!$result){var_dump($access->errorInfo());die();}
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
-    $rqwsaId = $rqwsas[$row['QS ID']];
+    $rqwsaId = $systems[$row['QS ID']];
 
     //wsstatus
     $insert = "INSERT INTO {$mysqldb}wsstatus VALUES(NULL,$rqwsaId,{$row['assigned']},{$row['done']},{$row['PA']})";
@@ -221,6 +224,7 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
     $temp2 = str_replace('"','\"',$row['Actual Regulatory Quote']);
     $insert.=",\"$temp\",\"$temp2\")";
 
+
     $res = mysql_query($insert);
     if(!$res){
         echo "<span style='color:red'>FAILED: </span>$insert<br/>\n";
@@ -232,4 +236,62 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
 
     $regRef[$row['Ref ID']] = mysql_insert_id();
 
+}
+
+
+//add the regulatory reference
+echo "<hr><h2>Adding Remark table</h2><hr>";
+
+$q = "select * from `Remarks`";
+$result = $access->query($q);
+if(!$result){var_dump($access->errorInfo());die();}
+while($row = $result->fetch(PDO::FETCH_ASSOC)){
+    $auditId = $audits[$row['Audit ID']];
+    $qId = $systems[$row['WS Reference']];
+
+
+    $auditorId = $auditors[$row['Auditor']];
+
+    $aclass = quote($row['Auditee Class']);
+    $remark = quote($row['Remark']);
+    $level = quote($row['Remark Level']);
+    $cat = quote($row['Remark Category']);
+    $type = quote($row['Remark Type']);
+    $status = quote($row['Remark Status']);
+
+    $insert = "INSERT INTO {$mysqldb}`remark` VALUES (NULL,$auditId,$qId,$auditorId,$aclass,$remark,$level,$cat,$type,$status";
+
+    $i=0;
+    foreach($row as $key=>$val){
+        if($i > 16){
+            $insert.=','.quote($val);
+        }
+        $i++;
+    }
+    $insert.=")";
+
+    $res = mysql_query($insert);
+    if(!$res){
+        echo "<span style='color:red'>FAILED: </span>$insert<br/>\n";
+        echo mysql_error()."<br/>";
+    }else{
+        echo "<span style='color:green'>SUCCESS: </span>$insert<br/>\n";
+    }
+
+    //insert the HABTM
+    $fields = array('US Reg Ref','Other Reg Ref','EU Ref Ref','JPAL Reg Ref');
+    foreach($fields as $f){
+        if(!empty($row[$f])){
+            $refId = $regRef[$row[$f]];
+            $remarkId = mysql_insert_id();
+            $insert = "INSERT INTO {$mysqldb}`regulatory_references_remarks` VALUES (NULL,$refId,$remarkId)";
+            $res = mysql_query($insert);
+            if(!$res){
+                echo "<span style='color:red'>FAILED: </span>$insert<br/>\n";
+                echo mysql_error()."<br/>";
+            }else{
+                echo "<span style='color:green'>SUCCESS: </span>$insert<br/>\n";
+            }
+        }
+    }
 }

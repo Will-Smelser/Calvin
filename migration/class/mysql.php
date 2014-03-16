@@ -14,3 +14,7 @@ class Mysql{
         return $link;
     }
 }
+
+function quote($input,$q="'"){
+    return empty($input) ? 'NULL' : "'".str_replace("$q","\\$q",$input)."'";
+}
