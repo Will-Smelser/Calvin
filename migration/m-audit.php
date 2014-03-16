@@ -32,7 +32,7 @@ $result = mysql_query($q);
 if(!$result) die(mysql_error());
 
 while($row = mysql_fetch_assoc($result)){
-    $auditors[$row['Auditor\'s ID']] = $row['id'];
+    $auditors[$row['Auditors ID']] = $row['id'];
 }
 mysql_free_result($result);
 
@@ -71,7 +71,7 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
     $newid = mysql_insert_id();
 
     //add the auditors each into the table
-    $insert = "INSERT INTO {$mysqldb}audit_auditor VALUES";
+    $insert = "INSERT INTO {$mysqldb}audits_auditors VALUES";
     $comma = '';
     for($i=1; $i<6; $i++){
         $val = $row['Auditor '.$i.' ID'];

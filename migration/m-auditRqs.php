@@ -32,7 +32,7 @@ $result = mysql_query($q);
 if(!$result) die(mysql_error());
 
 while($row = mysql_fetch_assoc($result)){
-    $auditors[$row['Auditor\'s ID']] = $row['id'];
+    $auditors[$row['Auditors ID']] = $row['id'];
 }
 mysql_free_result($result);
 
@@ -43,7 +43,7 @@ $result = mysql_query($q);
 if(!$result) die(mysql_error());
 
 while($row = mysql_fetch_assoc($result)){
-    $personnel[$row['Personnel\'s ID Code']] = $row['id'];
+    $personnel[$row['Personnel ID Code']] = $row['id'];
 }
 mysql_free_result($result);
 
@@ -180,14 +180,15 @@ $q = "select * from `Suggestions`";
 $result = $access->query($q);
 if(!$result){var_dump($access->errorInfo());die();}
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
+    $name = quote($row['Suggestion ID']);
     $auditorId = $auditors[$row['Auditor']];
     $auditId = $audits[$row['Audit ID']];
     $systemId = $systems[$row['WS Reference']];
 
-    $suggest = str_replace('"','\"',$row['Suggestion']);
-    $status = $row['Suggestion Status'];
+    $suggest = quote($row['Suggestion']);
+    $status = quote($row['Suggestion Status']);
 
-    $insert = "INSERT INTO {$mysqldb}`suggestion` VALUES (NULL,$auditId,$auditorId,$systemId,\"$suggest\",\"$status\"";
+    $insert = "INSERT INTO {$mysqldb}`suggestion` VALUES (NULL,$auditId,$auditorId,$systemId,$name,$suggest,$status";
 
     $i=0;
     foreach($row as $key=>$val){

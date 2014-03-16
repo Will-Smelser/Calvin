@@ -43,7 +43,7 @@ $result = mysql_query($q);
 if(!$result) die(mysql_error());
 
 while($row = mysql_fetch_assoc($result)){
-    $personnel[$row['Personnel\'s ID Code']] = $row['id'];
+    $personnel[$row['Personnel ID Code']] = $row['id'];
 }
 mysql_free_result($result);
 
