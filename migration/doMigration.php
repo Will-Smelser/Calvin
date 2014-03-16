@@ -12,7 +12,7 @@ require_once 'class/mysql.php';
 $access = MyPdo::connect(MyPdo::$mdb);
 $mysql = Mysql::connect();
 
-$mysqldb = '`calvin_new`.';
+$mysqldb = '`iqauditing`.';
 
 /*
  * delete from personnel;
@@ -24,7 +24,7 @@ delete from country_codes;
 delete from state_codes;
  */
 $tables = array(
-    'rqswsa','auditmain','audit_auditor','audit','personnel','auditor','facility','facility_address','company','address','country_code','state_code'
+    'regulatory_reference','suggestion','document','wsstatus','rqswsa','quality_system','auditmain','audit_auditor','audit','personnel','auditor','facility','facility_addresses','company','address','country_code','state_code'
 );
 
 foreach($tables as $table){
@@ -48,3 +48,6 @@ require_once 'm-audit.php';
 
 //add rqswsa table
 require_once 'm-auditRqs.php';
+
+//add status and document
+require_once 'm-auditStatus.php';

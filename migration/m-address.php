@@ -5,7 +5,7 @@ require_once 'class/mysql.php';
 $access = MyPdo::connect(MyPdo::$mdb);
 $mysql = Mysql::connect();
 
-$mysqldb = '`calvin_new`.';
+$mysqldb = '`iqauditing`.';
 
 //load cit/country
 $countries=array();
@@ -109,6 +109,7 @@ $result = $access->query($query);
 
 if(!$result){var_dump($access->errorInfo());die();}
 
+
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     //$id = mysql_insert_id(); //address id
     $cid = $companies[$row['Company']];
@@ -130,7 +131,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         echo mysql_error();
     }else{
         echo "<span style='color:green'>SUCCESS: </span>$q<br/>\n";
-        continue;
     }
 
     $id = mysql_insert_id();
@@ -138,7 +138,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     $ccode = $countries[$row['Facility Country']]['id'];
     $scode = $states[$row['Facility State']]['id'];
 
-    $q = "insert into calvin_new.address values (NULL,$id,\"{$row['Facility Address']}\",NULL,\"{$row['Facility City']}\",$scode,\"{$row['Facility Zip Code']}\",$ccode)";
+    $q = "insert into {$mysqldb}facility_addresses values (NULL,$id,\"{$row['Facility Address']}\",NULL,\"{$row['Facility City']}\",$scode,\"{$row['Facility Zip Code']}\",$ccode)";
     $res = mysql_query($q);
     if(!$res){
         echo "<span style='color:red'>FAILED: </span>$q<br/>\n";

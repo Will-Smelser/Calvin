@@ -11,7 +11,7 @@ require_once 'class/mysql.php';
 $access = MyPdo::connect(MyPdo::$mdb);
 $mysql = Mysql::connect();
 
-$mysqldb = '`calvin_new`.';
+$mysqldb = '`iqauditing`.';
 
 //need facility list
 //build list of facilities
